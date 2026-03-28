@@ -417,16 +417,13 @@ public final class DaggerPaymentReminderApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel = "com.paymentreminder.ui.screens.editpayment.EditPaymentViewModel";
-
       static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
 
       static String com_paymentreminder_ui_screens_payments_PaymentListViewModel = "com.paymentreminder.ui.screens.payments.PaymentListViewModel";
 
       static String com_paymentreminder_ui_screens_dashboard_DashboardViewModel = "com.paymentreminder.ui.screens.dashboard.DashboardViewModel";
 
-      @KeepFieldType
-      EditPaymentViewModel com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel2;
+      static String com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel = "com.paymentreminder.ui.screens.editpayment.EditPaymentViewModel";
 
       @KeepFieldType
       AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
@@ -436,6 +433,9 @@ public final class DaggerPaymentReminderApp_HiltComponents_SingletonC {
 
       @KeepFieldType
       DashboardViewModel com_paymentreminder_ui_screens_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
+      EditPaymentViewModel com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel2;
     }
   }
 
@@ -487,25 +487,25 @@ public final class DaggerPaymentReminderApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
-
       static String com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel = "com.paymentreminder.ui.screens.editpayment.EditPaymentViewModel";
 
-      static String com_paymentreminder_ui_screens_payments_PaymentListViewModel = "com.paymentreminder.ui.screens.payments.PaymentListViewModel";
+      static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
 
       static String com_paymentreminder_ui_screens_dashboard_DashboardViewModel = "com.paymentreminder.ui.screens.dashboard.DashboardViewModel";
 
-      @KeepFieldType
-      AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
+      static String com_paymentreminder_ui_screens_payments_PaymentListViewModel = "com.paymentreminder.ui.screens.payments.PaymentListViewModel";
 
       @KeepFieldType
       EditPaymentViewModel com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel2;
 
       @KeepFieldType
-      PaymentListViewModel com_paymentreminder_ui_screens_payments_PaymentListViewModel2;
+      AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
 
       @KeepFieldType
       DashboardViewModel com_paymentreminder_ui_screens_dashboard_DashboardViewModel2;
+
+      @KeepFieldType
+      PaymentListViewModel com_paymentreminder_ui_screens_payments_PaymentListViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
