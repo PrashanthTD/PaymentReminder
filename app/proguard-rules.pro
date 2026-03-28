@@ -1,0 +1,8 @@
+-keep class com.google.api.** { *; }
+-keep class com.google.http.** { *; }
+-dontwarn com.google.api.**
+-dontwarn org.apache.http.**
+-dontwarn com.google.android.gms.**
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.paymentreminder.data.model.** { *; }
