@@ -14,9 +14,6 @@ interface PaymentDao {
     @Query("SELECT * FROM payments ORDER BY dueDateEpoch ASC")
     fun getAllPayments(): Flow<List<PaymentEntity>>
 
-    @Query("SELECT * FROM payments WHERE isPaid = 0 ORDER BY dueDateEpoch ASC")
-    fun getUnpaidPayments(): Flow<List<PaymentEntity>>
-
     @Query("SELECT * FROM payments WHERE isPaid = 0 AND dueDateEpoch < :todayEpoch")
     suspend fun getOverduePayments(todayEpoch: Long): List<PaymentEntity>
 
@@ -52,18 +49,6 @@ interface PaymentDao {
 
     @Query("SELECT COALESCE(SUM(amount), 0.0) FROM payments WHERE isPaid = 0")
     fun getTotalUnpaidAmount(): Flow<Double>
-
-    @Query("SELECT * FROM payments WHERE isPaid = 0")
-    suspend fun getAllUnpaidSync(): List<PaymentEntity>
-
-    @Query("SELECT * FROM payments")
-    suspend fun getAllPaymentsSync(): List<PaymentEntity>
-
-    @Query("DELETE FROM payments")
-    suspend fun deleteAll()
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(payments: List<PaymentEntity>)
 
     @Query("SELECT * FROM payments WHERE vendorName = :vendorName AND dueDateEpoch = :dueDateEpoch LIMIT 1")
     suspend fun findByVendorAndDate(vendorName: String, dueDateEpoch: Long): PaymentEntity?

@@ -21,9 +21,6 @@ class PaymentRepository @Inject constructor(
     fun getAllPayments(): Flow<List<Payment>> =
         dao.getAllPayments().map { list -> list.map { it.toDomain() } }
 
-    fun getUnpaidPayments(): Flow<List<Payment>> =
-        dao.getUnpaidPayments().map { list -> list.map { it.toDomain() } }
-
     fun getTotalCount(): Flow<Int> = dao.getTotalCount()
 
     fun getOverdueCount(): Flow<Int> =
@@ -51,9 +48,6 @@ class PaymentRepository @Inject constructor(
     suspend fun getPaymentById(id: Long): Payment? =
         dao.getPaymentById(id)?.toDomain()
 
-    suspend fun getAllUnpaidSync(): List<Payment> =
-        dao.getAllUnpaidSync().map { it.toDomain() }
-
     suspend fun addNotifications(paymentId: Long, scheduledAtList: List<Long>, isCustom: Boolean = false): List<Long> {
         val entities = scheduledAtList.map {
             PaymentNotificationEntity(paymentId = paymentId, scheduledAt = it, isCustom = isCustom)
@@ -69,9 +63,6 @@ class PaymentRepository @Inject constructor(
 
     suspend fun deleteNotificationsForPayment(paymentId: Long) =
         notificationDao.deleteForPayment(paymentId)
-
-    suspend fun deleteMonthlyNotificationsForPayment(paymentId: Long) =
-        notificationDao.deleteMonthlyForPayment(paymentId)
 
     suspend fun findByVendorAndDate(vendorName: String, dueDateEpoch: Long): Payment? =
         dao.findByVendorAndDate(vendorName, dueDateEpoch)?.toDomain()

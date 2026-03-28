@@ -4,7 +4,15 @@
       "Bash(/Users/apple/Library/Android/sdk/emulator/emulator -list-avds)",
       "Bash(/Users/apple/Library/Android/sdk/platform-tools/adb devices:*)",
       "Bash(/Users/apple/Library/Android/sdk/platform-tools/adb shell:*)",
-      "Bash(grep -E \"\\\\.\\(kt|xml\\)$\")"
+      "Bash(grep -E \"\\\\.\\(kt|xml\\)$\")",
+      "Bash(for str:*)",
+      "Bash(do)",
+      "Bash(if ! grep -r \"R\\\\.string\\\\.$str\" /Users/apple/Desktop/PaymentReminder/app/src/main/java/com/paymentreminder --include=\"*.kt\")",
+      "Bash(then)",
+      "Bash(echo \"UNUSED: $str\")",
+      "Bash(for const:*)",
+      "Bash(do if:*)",
+      "Bash(then echo:*)"
     ]
   }
 }

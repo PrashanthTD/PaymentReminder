@@ -1,7 +1,6 @@
 package com.paymentreminder;
 
 import androidx.hilt.work.HiltWrapper_WorkerFactoryModule;
-import com.paymentreminder.di.AppModule;
 import com.paymentreminder.di.DatabaseModule;
 import com.paymentreminder.notification.BootReceiver_GeneratedInjector;
 import com.paymentreminder.notification.NotificationReceiver_GeneratedInjector;
@@ -135,7 +134,6 @@ public final class PaymentReminderApp_HiltComponents {
 
   @Component(
       modules = {
-          AppModule.class,
           ApplicationContextModule.class,
           DatabaseModule.class,
           HiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule.class,

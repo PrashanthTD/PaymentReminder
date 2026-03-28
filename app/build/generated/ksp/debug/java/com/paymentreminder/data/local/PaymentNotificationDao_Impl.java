@@ -33,11 +33,7 @@ public final class PaymentNotificationDao_Impl implements PaymentNotificationDao
 
   private final EntityInsertionAdapter<PaymentNotificationEntity> __insertionAdapterOfPaymentNotificationEntity;
 
-  private final SharedSQLiteStatement __preparedStmtOfDeleteMonthlyForPayment;
-
   private final SharedSQLiteStatement __preparedStmtOfDeleteForPayment;
-
-  private final SharedSQLiteStatement __preparedStmtOfDeleteById;
 
   public PaymentNotificationDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
@@ -58,27 +54,11 @@ public final class PaymentNotificationDao_Impl implements PaymentNotificationDao
         statement.bindLong(4, _tmp);
       }
     };
-    this.__preparedStmtOfDeleteMonthlyForPayment = new SharedSQLiteStatement(__db) {
-      @Override
-      @NonNull
-      public String createQuery() {
-        final String _query = "DELETE FROM payment_notifications WHERE paymentId = ? AND isCustom = 0";
-        return _query;
-      }
-    };
     this.__preparedStmtOfDeleteForPayment = new SharedSQLiteStatement(__db) {
       @Override
       @NonNull
       public String createQuery() {
         final String _query = "DELETE FROM payment_notifications WHERE paymentId = ?";
-        return _query;
-      }
-    };
-    this.__preparedStmtOfDeleteById = new SharedSQLiteStatement(__db) {
-      @Override
-      @NonNull
-      public String createQuery() {
-        final String _query = "DELETE FROM payment_notifications WHERE id = ?";
         return _query;
       }
     };
@@ -98,32 +78,6 @@ public final class PaymentNotificationDao_Impl implements PaymentNotificationDao
           return _result;
         } finally {
           __db.endTransaction();
-        }
-      }
-    }, $completion);
-  }
-
-  @Override
-  public Object deleteMonthlyForPayment(final long paymentId,
-      final Continuation<? super Unit> $completion) {
-    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
-      @Override
-      @NonNull
-      public Unit call() throws Exception {
-        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteMonthlyForPayment.acquire();
-        int _argIndex = 1;
-        _stmt.bindLong(_argIndex, paymentId);
-        try {
-          __db.beginTransaction();
-          try {
-            _stmt.executeUpdateDelete();
-            __db.setTransactionSuccessful();
-            return Unit.INSTANCE;
-          } finally {
-            __db.endTransaction();
-          }
-        } finally {
-          __preparedStmtOfDeleteMonthlyForPayment.release(_stmt);
         }
       }
     }, $completion);
@@ -150,31 +104,6 @@ public final class PaymentNotificationDao_Impl implements PaymentNotificationDao
           }
         } finally {
           __preparedStmtOfDeleteForPayment.release(_stmt);
-        }
-      }
-    }, $completion);
-  }
-
-  @Override
-  public Object deleteById(final long id, final Continuation<? super Unit> $completion) {
-    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
-      @Override
-      @NonNull
-      public Unit call() throws Exception {
-        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteById.acquire();
-        int _argIndex = 1;
-        _stmt.bindLong(_argIndex, id);
-        try {
-          __db.beginTransaction();
-          try {
-            _stmt.executeUpdateDelete();
-            __db.setTransactionSuccessful();
-            return Unit.INSTANCE;
-          } finally {
-            __db.endTransaction();
-          }
-        } finally {
-          __preparedStmtOfDeleteById.release(_stmt);
         }
       }
     }, $completion);

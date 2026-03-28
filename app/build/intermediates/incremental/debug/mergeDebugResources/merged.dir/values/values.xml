@@ -7,13 +7,11 @@
     <bool name="workmanager_test_configuration">false</bool>
     <color name="androidx_core_ripple_material_light">#1f000000</color>
     <color name="androidx_core_secondary_text_default_material_light">#8a000000</color>
-    <color name="black">#FF000000</color>
     <color name="call_notification_answer_color">#1d873b</color>
     <color name="call_notification_decline_color">#d93025</color>
     <color name="notification_action_color_filter">#ffffffff</color>
     <color name="notification_icon_bg_color">#ff9e9e9e</color>
-    <color name="seed">#00677D</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="seed">#1565C0</color>
     <dimen name="compat_button_inset_horizontal_material">4dp</dimen>
     <dimen name="compat_button_inset_vertical_material">6dp</dimen>
     <dimen name="compat_button_padding_horizontal_material">8dp</dimen>
@@ -109,13 +107,8 @@
     <item name="wrapped_composition_tag" type="id"/>
     <integer name="m3c_window_layout_in_display_cutout_mode">1</integer>
     <integer name="status_bar_notification_info_maxnum">999</integer>
-    <string name="add_payment">Add Payment</string>
-    <string name="all">All</string>
-    <string name="amount">Amount</string>
     <string name="androidx_startup" translatable="false">androidx.startup</string>
     <string name="app_name">Payment Reminder</string>
-    <string name="backup_success">Backup completed successfully</string>
-    <string name="backup_to_drive">Backup to Drive</string>
     <string name="call_notification_answer_action">Answer</string>
     <string name="call_notification_answer_video_action">Video</string>
     <string name="call_notification_decline_action">Decline</string>
@@ -123,21 +116,13 @@
     <string name="call_notification_incoming_text">Incoming call</string>
     <string name="call_notification_ongoing_text">Ongoing call</string>
     <string name="call_notification_screening_text">Screening an incoming call</string>
-    <string name="cancel">Cancel</string>
     <string name="close_drawer">"Close navigation menu"</string>
     <string name="close_sheet">"Close sheet"</string>
-    <string name="confirm_delete">Are you sure you want to delete this payment?</string>
-    <string name="dashboard">Dashboard</string>
     <string name="default_error_message">"Invalid input"</string>
     <string name="default_popup_window_title" ns1:ignore="ExtraTranslation">"Pop-Up Window"</string>
-    <string name="delete">Delete</string>
     <string name="dropdown_menu">"Dropdown menu"</string>
-    <string name="due_date">Due Date</string>
-    <string name="due_soon">Due Soon</string>
-    <string name="filter">Filter</string>
     <string name="in_progress">In progress</string>
     <string name="indeterminate">Partially checked</string>
-    <string name="invoice_number">Invoice Number</string>
     <string name="m3c_bottom_sheet_collapse_description">Collapse bottom sheet</string>
     <string name="m3c_bottom_sheet_dismiss_description">Dismiss bottom sheet</string>
     <string name="m3c_bottom_sheet_drag_handle_description">Drag handle</string>
@@ -199,26 +184,13 @@
     <string name="m3c_time_picker_pm">PM</string>
     <string name="m3c_tooltip_long_press_label">Show tooltip</string>
     <string name="m3c_tooltip_pane_description">Tooltip</string>
-    <string name="mark_as_paid">Mark as Paid</string>
     <string name="navigation_menu">"Navigation menu"</string>
-    <string name="no_payments">No payments yet</string>
     <string name="not_selected">Not selected</string>
     <string name="notification_channel_desc">Notifications for upcoming and overdue payments</string>
     <string name="notification_channel_name">Payment Reminders</string>
-    <string name="overdue">Overdue</string>
-    <string name="paid">Paid</string>
-    <string name="payment_added">Payment added successfully</string>
-    <string name="payment_marked_paid">Payment marked as paid</string>
-    <string name="payments">Payments</string>
     <string name="range_end">"Range end"</string>
     <string name="range_start">"Range start"</string>
-    <string name="restore_from_drive">Restore from Drive</string>
-    <string name="restore_success">Data restored successfully</string>
-    <string name="save">Save</string>
     <string name="selected">Selected</string>
-    <string name="settings">Settings</string>
-    <string name="sign_in_with_google">Sign in with Google</string>
-    <string name="sign_out">Sign Out</string>
     <string name="state_empty">Empty</string>
     <string name="state_off">Off</string>
     <string name="state_on">On</string>
@@ -228,11 +200,6 @@
     <string name="template_percent"><ns2:g id="percentage">%1$d</ns2:g> percent.</string>
     <string name="tooltip_description">tooltip</string>
     <string name="tooltip_label">show tooltip</string>
-    <string name="total_payments">Total Payments</string>
-    <string name="total_pending">Total Pending</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="vendor_name">Vendor Name</string>
-    <string name="welcome_back">Welcome back</string>
     <style name="DialogWindowTheme">
         <item name="android:windowClipToOutline">false</item>
     </style>
@@ -310,23 +277,14 @@
         <attr format="reference" name="fontProviderCerts"/>
         
         <attr name="fontProviderFetchStrategy">
-            <!-- The blocking font fetch works as follows.
-              First, check the local cache, then if the requested font is not cached, request the
-              font from the provider and wait until it is finished.  You can change the length of
-              the timeout by modifying fontProviderFetchTimeout.  If the timeout happens, the
-              default typeface will be used instead. -->
+            
             <enum name="blocking" value="0"/>
-            <!-- The async font fetch works as follows.
-              First, check the local cache, then if the requested font is not cached, trigger a
-              request the font and continue with layout inflation. Once the font fetch succeeds, the
-              target text view will be refreshed with the downloaded font data. The
-              fontProviderFetchTimeout will be ignored if async loading is specified. -->
+            
             <enum name="async" value="1"/>
         </attr>
         
         <attr format="integer" name="fontProviderFetchTimeout">
-            <!-- A special value for the timeout. In this case, the blocking font fetching will not
-              timeout and wait until a reply is received from the font provider. -->
+            
             <enum name="forever" value="-1"/>
         </attr>
         
