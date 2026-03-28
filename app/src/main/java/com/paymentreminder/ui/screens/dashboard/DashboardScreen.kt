@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,16 +33,21 @@ fun DashboardScreen(viewModel: DashboardViewModel = hiltViewModel()) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Column {
+            TopAppBar(
+                title = {
                     Text(
                         text = "Dashboard",
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold
                     )
-                }
-            })
-        }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -63,7 +69,8 @@ fun DashboardScreen(viewModel: DashboardViewModel = hiltViewModel()) {
                 Text(
                     text = "Needs Attention",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 uiState.urgentPayments.forEach { payment ->
                     PaymentCard(

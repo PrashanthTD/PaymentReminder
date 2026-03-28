@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -32,10 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.paymentreminder.data.model.Payment
 import com.paymentreminder.data.model.PaymentStatus
-import com.paymentreminder.ui.theme.StatusDueSoon
-import com.paymentreminder.ui.theme.StatusOverdue
-import com.paymentreminder.ui.theme.StatusPaid
-import com.paymentreminder.ui.theme.StatusUpcoming
+import com.paymentreminder.ui.theme.LocalAppColors
 import com.paymentreminder.util.DateUtils
 
 @Composable
@@ -45,11 +43,13 @@ fun PaymentCard(
     onEdit: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null
 ) {
+    val appColors = LocalAppColors.current
+
     val statusColor = when (payment.status) {
-        PaymentStatus.UPCOMING -> StatusUpcoming
-        PaymentStatus.DUE_SOON -> StatusDueSoon
-        PaymentStatus.OVERDUE -> StatusOverdue
-        PaymentStatus.PAID -> StatusPaid
+        PaymentStatus.UPCOMING -> appColors.statusUpcoming
+        PaymentStatus.DUE_SOON -> appColors.statusDueSoon
+        PaymentStatus.OVERDUE -> appColors.statusOverdue
+        PaymentStatus.PAID -> appColors.statusPaid
     }
 
     val statusContainerColor = statusColor.copy(alpha = 0.12f)
@@ -58,8 +58,19 @@ fun PaymentCard(
     if (showDeleteDialog && onDelete != null) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Payment") },
-            text = { Text("Are you sure you want to delete this payment?") },
+            title = {
+                Text(
+                    "Delete Payment",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
+            text = {
+                Text(
+                    "Are you sure you want to delete this payment?",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             confirmButton = {
                 TextButton(onClick = {
                     onDelete()
@@ -69,12 +80,19 @@ fun PaymentCard(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) { Text("Cancel") }
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
             }
         )
     }
 
-    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        )
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -85,7 +103,8 @@ fun PaymentCard(
                     Text(
                         text = payment.vendorName,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = payment.invoiceNumber,
@@ -132,7 +151,11 @@ fun PaymentCard(
                 Row {
                     if (payment.status != PaymentStatus.PAID && onMarkPaid != null) {
                         FilledTonalIconButton(onClick = onMarkPaid) {
-                            Icon(Icons.Default.Check, contentDescription = "Mark as Paid", tint = StatusPaid)
+                            Icon(
+                                Icons.Default.Check,
+                                contentDescription = "Mark as Paid",
+                                tint = appColors.statusPaid
+                            )
                         }
                     }
                     if (onEdit != null) {

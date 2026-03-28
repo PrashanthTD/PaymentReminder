@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -30,14 +31,17 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -92,8 +96,11 @@ fun EditPaymentScreen(
 
     // Show loading spinner until payment is loaded
     if (uiState.isLoading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
         return
     }
@@ -141,8 +148,9 @@ fun EditPaymentScreen(
     if (notifPickerPhase == PickerPhase.TIME) {
         AlertDialog(
             onDismissRequest = { notifPickerPhase = PickerPhase.NONE; editingNotifId = null },
-            title = { Text("Select time") },
+            title = { Text("Select time", color = MaterialTheme.colorScheme.onSurface) },
             text = { TimePicker(state = notifTimePickerState) },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             confirmButton = {
                 TextButton(onClick = {
                     val date = notifPickerDate ?: LocalDate.now()
@@ -167,15 +175,28 @@ fun EditPaymentScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Edit Payment", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Edit Payment",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -215,23 +236,45 @@ fun EditPaymentScreen(
                 supportingText = uiState.amountError?.let { { Text(it) } }
             )
 
-            OutlinedTextField(
-                value = uiState.dueDateDisplay,
-                onValueChange = {},
-                label = { Text("Due Date") },
-                modifier = Modifier.fillMaxWidth(),
-                readOnly = true,
-                trailingIcon = {
-                    IconButton(onClick = { showDueDatePicker = true }) {
-                        Icon(Icons.Default.CalendarMonth, contentDescription = "Select date")
-                    }
-                },
-                isError = uiState.dueDateError != null,
-                supportingText = uiState.dueDateError?.let { { Text(it) } }
-            )
+            OutlinedButton(
+                onClick = { showDueDatePicker = true },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    if (uiState.dueDateError != null) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.outline
+                )
+            ) {
+                Icon(
+                    Icons.Default.CalendarMonth,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = uiState.dueDateDisplay.ifEmpty { "Select Due Date" },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (uiState.dueDateDisplay.isEmpty()) MaterialTheme.colorScheme.onSurfaceVariant
+                    else MaterialTheme.colorScheme.onSurface
+                )
+            }
+            if (uiState.dueDateError != null) {
+                Text(
+                    text = uiState.dueDateError!!,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
 
             // ── Notifications section ──────────────────────────────────────
-            OutlinedCard(modifier = Modifier.fillMaxWidth()) {
+            OutlinedCard(
+                modifier = Modifier.fillMaxWidth(),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp, MaterialTheme.colorScheme.outlineVariant
+                )
+            ) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
 
                     // Header row
@@ -249,7 +292,10 @@ fun EditPaymentScreen(
                             text = "Notifications",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 8.dp)
                         )
                         TextButton(onClick = { notifPickerPhase = PickerPhase.DATE; editingNotifId = null }) {
                             Icon(Icons.Default.AddAlarm, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -257,7 +303,10 @@ fun EditPaymentScreen(
                         }
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 2.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 2.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
 
                     // Monthly reminder toggle
                     Row(
@@ -278,25 +327,35 @@ fun EditPaymentScreen(
                             Text(
                                 text = "Monthly Reminder",
                                 style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = "Notify every month on due date at 9:00 AM",
+                                text = "Notify one day before due date at 9:00 AM",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                         Switch(
                             checked = uiState.monthlyReminder,
-                            onCheckedChange = { viewModel.toggleMonthlyReminder() }
+                            onCheckedChange = { viewModel.toggleMonthlyReminder() },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                                checkedTrackColor = MaterialTheme.colorScheme.primary,
+                                uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                            )
                         )
                     }
 
                     // Individual notifications list
                     if (uiState.notifications.isNotEmpty()) {
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = 4.dp),
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        )
                         uiState.notifications.forEachIndexed { index, notif ->
-                            if (index > 0) HorizontalDivider()
+                            if (index > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
@@ -304,6 +363,7 @@ fun EditPaymentScreen(
                                 Text(
                                     text = notif.displayText,
                                     style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.weight(1f)
                                 )
                                 TextButton(onClick = {
@@ -338,8 +398,16 @@ fun EditPaymentScreen(
 
             Button(
                 onClick = viewModel::save,
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                enabled = !uiState.isSaving
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                enabled = !uiState.isSaving,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             ) {
                 if (uiState.isSaving) {
                     CircularProgressIndicator(

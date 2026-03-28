@@ -134,13 +134,13 @@ class AddPaymentViewModel @Inject constructor(
                 }
             }
 
-            // Schedule monthly reminders for the next 12 months at 9:00 AM on the due date day
+            // Schedule monthly reminders for the next 12 months at 9:00 AM, one day before the due date
             if (state.monthlyReminder) {
                 val dueDate = state.dueDate!!
                 val now = LocalDateTime.now()
                 val schedules = mutableListOf<Long>()
                 for (i in 1..12) {
-                    val targetDate = try { dueDate.plusMonths(i.toLong()) } catch (e: Exception) { continue }
+                    val targetDate = try { dueDate.plusMonths(i.toLong()).minusDays(1) } catch (e: Exception) { continue }
                     val triggerDt = LocalDateTime.of(targetDate, LocalTime.of(9, 0))
                     if (triggerDt.isAfter(now)) {
                         schedules.add(triggerDt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())

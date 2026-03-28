@@ -9,6 +9,7 @@ import com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel_HiltModules
 import com.paymentreminder.ui.screens.dashboard.DashboardViewModel_HiltModules;
 import com.paymentreminder.ui.screens.editpayment.EditPaymentViewModel_HiltModules;
 import com.paymentreminder.ui.screens.payments.PaymentListViewModel_HiltModules;
+import com.paymentreminder.ui.screens.settings.SettingsViewModel_HiltModules;
 import com.paymentreminder.worker.PaymentReminderWorker_HiltModule;
 import dagger.Binds;
 import dagger.Component;
@@ -173,7 +174,8 @@ public final class PaymentReminderApp_HiltComponents {
           HiltWrapper_SavedStateHandleModule.class,
           PaymentListViewModel_HiltModules.KeyModule.class,
           ActivityCBuilderModule.class,
-          ViewModelCBuilderModule.class
+          ViewModelCBuilderModule.class,
+          SettingsViewModel_HiltModules.KeyModule.class
       }
   )
   @ActivityRetainedScoped
@@ -213,7 +215,8 @@ public final class PaymentReminderApp_HiltComponents {
           DashboardViewModel_HiltModules.BindsModule.class,
           EditPaymentViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
-          PaymentListViewModel_HiltModules.BindsModule.class
+          PaymentListViewModel_HiltModules.BindsModule.class,
+          SettingsViewModel_HiltModules.BindsModule.class
       }
   )
   @ViewModelScoped

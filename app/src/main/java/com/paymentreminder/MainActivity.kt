@@ -8,12 +8,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.paymentreminder.ui.navigation.AppNavigation
 import com.paymentreminder.ui.theme.PaymentReminderTheme
+import com.paymentreminder.ui.theme.ThemeMode
+import com.paymentreminder.ui.theme.ThemePreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var themePreferenceManager: ThemePreferenceManager
 
     private val notifPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -24,7 +32,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         requestPermissions()
         setContent {
-            PaymentReminderTheme {
+            val themeMode by themePreferenceManager.themeMode.collectAsState()
+            val darkTheme = when (themeMode) {
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+            }
+            PaymentReminderTheme(darkTheme = darkTheme) {
                 AppNavigation()
             }
         }

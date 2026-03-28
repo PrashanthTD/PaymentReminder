@@ -18,9 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.paymentreminder.ui.theme.StatusDueSoon
-import com.paymentreminder.ui.theme.StatusOverdue
-import com.paymentreminder.ui.theme.StatusPaid
+import com.paymentreminder.ui.theme.LocalAppColors
 import com.paymentreminder.util.DateUtils
 
 @Composable
@@ -31,6 +29,8 @@ fun DashboardSummaryCards(
     dueSoonCount: Int,
     paidCount: Int
 ) {
+    val appColors = LocalAppColors.current
+
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.extraLarge,
@@ -63,9 +63,9 @@ fun DashboardSummaryCards(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        StatusCard(Modifier.weight(1f), "Overdue", overdueCount, StatusOverdue)
-        StatusCard(Modifier.weight(1f), "Due Soon", dueSoonCount, StatusDueSoon)
-        StatusCard(Modifier.weight(1f), "Paid", paidCount, StatusPaid)
+        StatusCard(Modifier.weight(1f), "Overdue", overdueCount, appColors.statusOverdue)
+        StatusCard(Modifier.weight(1f), "Due Soon", dueSoonCount, appColors.statusDueSoon)
+        StatusCard(Modifier.weight(1f), "Paid", paidCount, appColors.statusPaid)
     }
 }
 
@@ -76,7 +76,12 @@ private fun StatusCard(
     count: Int,
     color: Color
 ) {
-    OutlinedCard(modifier = modifier) {
+    OutlinedCard(
+        modifier = modifier,
+        border = androidx.compose.foundation.BorderStroke(
+            1.dp, MaterialTheme.colorScheme.outlineVariant
+        )
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

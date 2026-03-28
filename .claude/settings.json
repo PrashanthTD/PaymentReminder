@@ -3,7 +3,8 @@
     "allow": [
       "Bash(/Users/apple/Library/Android/sdk/emulator/emulator -list-avds)",
       "Bash(/Users/apple/Library/Android/sdk/platform-tools/adb devices:*)",
-      "Bash(/Users/apple/Library/Android/sdk/platform-tools/adb shell:*)"
+      "Bash(/Users/apple/Library/Android/sdk/platform-tools/adb shell:*)",
+      "Bash(grep -E \"\\\\.\\(kt|xml\\)$\")"
     ]
   }
 }
