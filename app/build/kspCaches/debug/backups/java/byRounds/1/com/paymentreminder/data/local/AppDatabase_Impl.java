@@ -34,14 +34,14 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(4) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(5) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `payments` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vendorName` TEXT NOT NULL, `invoiceNumber` TEXT NOT NULL, `dueDateEpoch` INTEGER NOT NULL, `amount` REAL NOT NULL, `isPaid` INTEGER NOT NULL, `paidDateEpoch` INTEGER, `isMonthlyReminder` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `payment_notifications` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `paymentId` INTEGER NOT NULL, `scheduledAt` INTEGER NOT NULL, FOREIGN KEY(`paymentId`) REFERENCES `payments`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `payment_notifications` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `paymentId` INTEGER NOT NULL, `scheduledAt` INTEGER NOT NULL, `isCustom` INTEGER NOT NULL DEFAULT 0, FOREIGN KEY(`paymentId`) REFERENCES `payments`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_payment_notifications_paymentId` ON `payment_notifications` (`paymentId`)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '89d73d10ab46274a7443e80ebc530967')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd4af6eb04321d008f0661742e04b3230')");
       }
 
       @Override
@@ -112,10 +112,11 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoPayments + "\n"
                   + " Found:\n" + _existingPayments);
         }
-        final HashMap<String, TableInfo.Column> _columnsPaymentNotifications = new HashMap<String, TableInfo.Column>(3);
+        final HashMap<String, TableInfo.Column> _columnsPaymentNotifications = new HashMap<String, TableInfo.Column>(4);
         _columnsPaymentNotifications.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsPaymentNotifications.put("paymentId", new TableInfo.Column("paymentId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsPaymentNotifications.put("scheduledAt", new TableInfo.Column("scheduledAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPaymentNotifications.put("isCustom", new TableInfo.Column("isCustom", "INTEGER", true, 0, "0", TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysPaymentNotifications = new HashSet<TableInfo.ForeignKey>(1);
         _foreignKeysPaymentNotifications.add(new TableInfo.ForeignKey("payments", "CASCADE", "NO ACTION", Arrays.asList("paymentId"), Arrays.asList("id")));
         final HashSet<TableInfo.Index> _indicesPaymentNotifications = new HashSet<TableInfo.Index>(1);
@@ -129,7 +130,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "89d73d10ab46274a7443e80ebc530967", "1501e8ef83dfbdbac1f1a140f53455ec");
+    }, "d4af6eb04321d008f0661742e04b3230", "0e0222f842757c70316f8593db545bf9");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

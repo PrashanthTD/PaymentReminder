@@ -1,5 +1,7 @@
 package com.paymentreminder.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,10 +9,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -36,12 +41,17 @@ import com.paymentreminder.data.model.PaymentStatus
 import com.paymentreminder.ui.theme.LocalAppColors
 import com.paymentreminder.util.DateUtils
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PaymentCard(
     payment: Payment,
     onMarkPaid: (() -> Unit)? = null,
     onEdit: (() -> Unit)? = null,
-    onDelete: (() -> Unit)? = null
+    onDelete: (() -> Unit)? = null,
+    selectionMode: Boolean = false,
+    isSelected: Boolean = false,
+    onLongPress: (() -> Unit)? = null,
+    onSelectionToggle: (() -> Unit)? = null
 ) {
     val appColors = LocalAppColors.current
 
@@ -59,10 +69,7 @@ fun PaymentCard(
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             title = {
-                Text(
-                    "Delete Payment",
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Text("Delete Payment", color = MaterialTheme.colorScheme.onSurface)
             },
             text = {
                 Text(
@@ -88,9 +95,17 @@ fun PaymentCard(
     }
 
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(
+                onClick = {
+                    if (selectionMode) onSelectionToggle?.invoke()
+                },
+                onLongClick = { onLongPress?.invoke() }
+            ),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+            else MaterialTheme.colorScheme.surfaceContainerLow
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -99,6 +114,18 @@ fun PaymentCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                if (selectionMode) {
+                    Icon(
+                        imageVector = if (isSelected) Icons.Filled.CheckCircle
+                        else Icons.Outlined.RadioButtonUnchecked,
+                        contentDescription = if (isSelected) "Selected" else "Not selected",
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(end = 4.dp)
+                    )
+                }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = payment.vendorName,
@@ -148,32 +175,34 @@ fun PaymentCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                Row {
-                    if (payment.status != PaymentStatus.PAID && onMarkPaid != null) {
-                        FilledTonalIconButton(onClick = onMarkPaid) {
-                            Icon(
-                                Icons.Default.Check,
-                                contentDescription = "Mark as Paid",
-                                tint = appColors.statusPaid
-                            )
+                if (!selectionMode) {
+                    Row {
+                        if (payment.status != PaymentStatus.PAID && onMarkPaid != null) {
+                            FilledTonalIconButton(onClick = onMarkPaid) {
+                                Icon(
+                                    Icons.Default.Check,
+                                    contentDescription = "Mark as Paid",
+                                    tint = appColors.statusPaid
+                                )
+                            }
                         }
-                    }
-                    if (onEdit != null) {
-                        IconButton(onClick = onEdit) {
-                            Icon(
-                                Icons.Default.Edit,
-                                contentDescription = "Edit",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
+                        if (onEdit != null) {
+                            IconButton(onClick = onEdit) {
+                                Icon(
+                                    Icons.Default.Edit,
+                                    contentDescription = "Edit",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
-                    }
-                    if (onDelete != null) {
-                        IconButton(onClick = { showDeleteDialog = true }) {
-                            Icon(
-                                Icons.Default.Delete,
-                                contentDescription = "Delete",
-                                tint = MaterialTheme.colorScheme.error
-                            )
+                        if (onDelete != null) {
+                            IconButton(onClick = { showDeleteDialog = true }) {
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Delete",
+                                    tint = MaterialTheme.colorScheme.error
+                                )
+                            }
                         }
                     }
                 }

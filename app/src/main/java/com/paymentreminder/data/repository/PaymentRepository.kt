@@ -54,10 +54,9 @@ class PaymentRepository @Inject constructor(
     suspend fun getAllUnpaidSync(): List<Payment> =
         dao.getAllUnpaidSync().map { it.toDomain() }
 
-    /** Insert notification schedules for a payment. Returns the generated IDs. */
-    suspend fun addNotifications(paymentId: Long, scheduledAtList: List<Long>): List<Long> {
+    suspend fun addNotifications(paymentId: Long, scheduledAtList: List<Long>, isCustom: Boolean = false): List<Long> {
         val entities = scheduledAtList.map {
-            PaymentNotificationEntity(paymentId = paymentId, scheduledAt = it)
+            PaymentNotificationEntity(paymentId = paymentId, scheduledAt = it, isCustom = isCustom)
         }
         return notificationDao.insertAll(entities)
     }
@@ -65,6 +64,19 @@ class PaymentRepository @Inject constructor(
     suspend fun getNotificationsForPayment(paymentId: Long): List<PaymentNotificationEntity> =
         notificationDao.getForPayment(paymentId)
 
+    suspend fun getCustomNotificationsForPayment(paymentId: Long): List<PaymentNotificationEntity> =
+        notificationDao.getCustomForPayment(paymentId)
+
     suspend fun deleteNotificationsForPayment(paymentId: Long) =
         notificationDao.deleteForPayment(paymentId)
+
+    suspend fun deleteMonthlyNotificationsForPayment(paymentId: Long) =
+        notificationDao.deleteMonthlyForPayment(paymentId)
+
+    suspend fun findByVendorAndDate(vendorName: String, dueDateEpoch: Long): Payment? =
+        dao.findByVendorAndDate(vendorName, dueDateEpoch)?.toDomain()
+
+    suspend fun deletePaymentById(paymentId: Long) {
+        dao.getPaymentById(paymentId)?.let { dao.deletePayment(it) }
+    }
 }

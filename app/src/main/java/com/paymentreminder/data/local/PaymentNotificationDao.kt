@@ -14,6 +14,12 @@ interface PaymentNotificationDao {
     @Query("SELECT * FROM payment_notifications WHERE paymentId = :paymentId")
     suspend fun getForPayment(paymentId: Long): List<PaymentNotificationEntity>
 
+    @Query("SELECT * FROM payment_notifications WHERE paymentId = :paymentId AND isCustom = 1")
+    suspend fun getCustomForPayment(paymentId: Long): List<PaymentNotificationEntity>
+
+    @Query("DELETE FROM payment_notifications WHERE paymentId = :paymentId AND isCustom = 0")
+    suspend fun deleteMonthlyForPayment(paymentId: Long)
+
     @Query("DELETE FROM payment_notifications WHERE paymentId = :paymentId")
     suspend fun deleteForPayment(paymentId: Long)
 

@@ -122,7 +122,7 @@ class AddPaymentViewModel @Inject constructor(
             // Schedule individual notifications
             if (state.notifications.isNotEmpty()) {
                 val epochList = state.notifications.map { it.epochMillis }
-                val notifIds = repository.addNotifications(insertedId, epochList)
+                val notifIds = repository.addNotifications(insertedId, epochList, isCustom = true)
                 notifIds.zip(state.notifications).forEach { (notifId, draft) ->
                     notificationScheduler.schedule(
                         notifId = notifId.toInt(),

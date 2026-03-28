@@ -53,18 +53,14 @@ class EditPaymentViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val payment = repository.getPaymentById(paymentId) ?: return@launch
-            // If monthly reminder is on, individual notifications are auto-managed — don't list them
-            val drafts = if (payment.isMonthlyReminder) {
-                emptyList()
-            } else {
-                repository.getNotificationsForPayment(paymentId).map { entity ->
-                    NotificationDraft(
-                        localId = entity.id.toString(),
-                        dateTime = Instant.ofEpochMilli(entity.scheduledAt)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime()
-                    )
-                }
+            // Always load custom notifications regardless of monthly reminder toggle
+            val drafts = repository.getCustomNotificationsForPayment(paymentId).map { entity ->
+                NotificationDraft(
+                    localId = entity.id.toString(),
+                    dateTime = Instant.ofEpochMilli(entity.scheduledAt)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime()
+                )
             }
             _uiState.value = EditPaymentUiState(
                 isLoading = false,
@@ -154,13 +150,13 @@ class EditPaymentViewModel @Inject constructor(
                 )
             )
 
-            // Replace notification rows and schedule new alarms
+            // Delete all notifications and re-create
             repository.deleteNotificationsForPayment(paymentId)
 
-            // Schedule individual notifications
+            // Save custom notifications (isCustom = true)
             if (state.notifications.isNotEmpty()) {
                 val epochList = state.notifications.map { it.epochMillis }
-                val newIds = repository.addNotifications(paymentId, epochList)
+                val newIds = repository.addNotifications(paymentId, epochList, isCustom = true)
                 newIds.zip(state.notifications).forEach { (notifId, draft) ->
                     notificationScheduler.schedule(
                         notifId = notifId.toInt(),
@@ -172,7 +168,7 @@ class EditPaymentViewModel @Inject constructor(
                 }
             }
 
-            // Schedule monthly reminders for the next 12 months at 9:00 AM, one day before the due date
+            // Schedule monthly reminders (isCustom = false)
             if (state.monthlyReminder) {
                 val dueDate = state.dueDate!!
                 val now = LocalDateTime.now()
@@ -185,7 +181,7 @@ class EditPaymentViewModel @Inject constructor(
                     }
                 }
                 if (schedules.isNotEmpty()) {
-                    val monthlyIds = repository.addNotifications(paymentId, schedules)
+                    val monthlyIds = repository.addNotifications(paymentId, schedules, isCustom = false)
                     monthlyIds.zip(schedules).forEach { (notifId, epochMillis) ->
                         notificationScheduler.schedule(
                             notifId = notifId.toInt(),

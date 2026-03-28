@@ -891,6 +891,75 @@ public final class PaymentDao_Impl implements PaymentDao {
     }, $completion);
   }
 
+  @Override
+  public Object findByVendorAndDate(final String vendorName, final long dueDateEpoch,
+      final Continuation<? super PaymentEntity> $completion) {
+    final String _sql = "SELECT * FROM payments WHERE vendorName = ? AND dueDateEpoch = ? LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, vendorName);
+    _argIndex = 2;
+    _statement.bindLong(_argIndex, dueDateEpoch);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<PaymentEntity>() {
+      @Override
+      @Nullable
+      public PaymentEntity call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfVendorName = CursorUtil.getColumnIndexOrThrow(_cursor, "vendorName");
+          final int _cursorIndexOfInvoiceNumber = CursorUtil.getColumnIndexOrThrow(_cursor, "invoiceNumber");
+          final int _cursorIndexOfDueDateEpoch = CursorUtil.getColumnIndexOrThrow(_cursor, "dueDateEpoch");
+          final int _cursorIndexOfAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "amount");
+          final int _cursorIndexOfIsPaid = CursorUtil.getColumnIndexOrThrow(_cursor, "isPaid");
+          final int _cursorIndexOfPaidDateEpoch = CursorUtil.getColumnIndexOrThrow(_cursor, "paidDateEpoch");
+          final int _cursorIndexOfIsMonthlyReminder = CursorUtil.getColumnIndexOrThrow(_cursor, "isMonthlyReminder");
+          final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
+          final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
+          final PaymentEntity _result;
+          if (_cursor.moveToFirst()) {
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpVendorName;
+            _tmpVendorName = _cursor.getString(_cursorIndexOfVendorName);
+            final String _tmpInvoiceNumber;
+            _tmpInvoiceNumber = _cursor.getString(_cursorIndexOfInvoiceNumber);
+            final long _tmpDueDateEpoch;
+            _tmpDueDateEpoch = _cursor.getLong(_cursorIndexOfDueDateEpoch);
+            final double _tmpAmount;
+            _tmpAmount = _cursor.getDouble(_cursorIndexOfAmount);
+            final boolean _tmpIsPaid;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsPaid);
+            _tmpIsPaid = _tmp != 0;
+            final Long _tmpPaidDateEpoch;
+            if (_cursor.isNull(_cursorIndexOfPaidDateEpoch)) {
+              _tmpPaidDateEpoch = null;
+            } else {
+              _tmpPaidDateEpoch = _cursor.getLong(_cursorIndexOfPaidDateEpoch);
+            }
+            final boolean _tmpIsMonthlyReminder;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfIsMonthlyReminder);
+            _tmpIsMonthlyReminder = _tmp_1 != 0;
+            final long _tmpCreatedAt;
+            _tmpCreatedAt = _cursor.getLong(_cursorIndexOfCreatedAt);
+            final long _tmpUpdatedAt;
+            _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
+            _result = new PaymentEntity(_tmpId,_tmpVendorName,_tmpInvoiceNumber,_tmpDueDateEpoch,_tmpAmount,_tmpIsPaid,_tmpPaidDateEpoch,_tmpIsMonthlyReminder,_tmpCreatedAt,_tmpUpdatedAt);
+          } else {
+            _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
   @NonNull
   public static List<Class<?>> getRequiredConverters() {
     return Collections.emptyList();

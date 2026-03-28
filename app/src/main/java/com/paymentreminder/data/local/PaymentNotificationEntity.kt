@@ -1,5 +1,6 @@
 package com.paymentreminder.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -21,5 +22,7 @@ data class PaymentNotificationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val paymentId: Long,
-    val scheduledAt: Long // epoch millis — exact date+time to fire
+    val scheduledAt: Long,
+    @ColumnInfo(defaultValue = "0")
+    val isCustom: Boolean = false
 )

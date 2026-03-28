@@ -64,4 +64,7 @@ interface PaymentDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(payments: List<PaymentEntity>)
+
+    @Query("SELECT * FROM payments WHERE vendorName = :vendorName AND dueDateEpoch = :dueDateEpoch LIMIT 1")
+    suspend fun findByVendorAndDate(vendorName: String, dueDateEpoch: Long): PaymentEntity?
 }

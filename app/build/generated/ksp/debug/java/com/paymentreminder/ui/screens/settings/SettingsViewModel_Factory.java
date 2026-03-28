@@ -1,5 +1,7 @@
 package com.paymentreminder.ui.screens.settings;
 
+import com.paymentreminder.data.repository.PaymentRepository;
+import com.paymentreminder.notification.NotificationScheduler;
 import com.paymentreminder.ui.theme.ThemePreferenceManager;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -26,22 +28,32 @@ import javax.inject.Provider;
 public final class SettingsViewModel_Factory implements Factory<SettingsViewModel> {
   private final Provider<ThemePreferenceManager> themePreferenceManagerProvider;
 
-  public SettingsViewModel_Factory(
-      Provider<ThemePreferenceManager> themePreferenceManagerProvider) {
+  private final Provider<PaymentRepository> repositoryProvider;
+
+  private final Provider<NotificationScheduler> notificationSchedulerProvider;
+
+  public SettingsViewModel_Factory(Provider<ThemePreferenceManager> themePreferenceManagerProvider,
+      Provider<PaymentRepository> repositoryProvider,
+      Provider<NotificationScheduler> notificationSchedulerProvider) {
     this.themePreferenceManagerProvider = themePreferenceManagerProvider;
+    this.repositoryProvider = repositoryProvider;
+    this.notificationSchedulerProvider = notificationSchedulerProvider;
   }
 
   @Override
   public SettingsViewModel get() {
-    return newInstance(themePreferenceManagerProvider.get());
+    return newInstance(themePreferenceManagerProvider.get(), repositoryProvider.get(), notificationSchedulerProvider.get());
   }
 
   public static SettingsViewModel_Factory create(
-      Provider<ThemePreferenceManager> themePreferenceManagerProvider) {
-    return new SettingsViewModel_Factory(themePreferenceManagerProvider);
+      Provider<ThemePreferenceManager> themePreferenceManagerProvider,
+      Provider<PaymentRepository> repositoryProvider,
+      Provider<NotificationScheduler> notificationSchedulerProvider) {
+    return new SettingsViewModel_Factory(themePreferenceManagerProvider, repositoryProvider, notificationSchedulerProvider);
   }
 
-  public static SettingsViewModel newInstance(ThemePreferenceManager themePreferenceManager) {
-    return new SettingsViewModel(themePreferenceManager);
+  public static SettingsViewModel newInstance(ThemePreferenceManager themePreferenceManager,
+      PaymentRepository repository, NotificationScheduler notificationScheduler) {
+    return new SettingsViewModel(themePreferenceManager, repository, notificationScheduler);
   }
 }

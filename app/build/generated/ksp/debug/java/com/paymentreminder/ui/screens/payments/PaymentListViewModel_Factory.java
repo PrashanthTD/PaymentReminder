@@ -1,6 +1,7 @@
 package com.paymentreminder.ui.screens.payments;
 
 import com.paymentreminder.data.repository.PaymentRepository;
+import com.paymentreminder.notification.NotificationScheduler;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -26,21 +27,26 @@ import javax.inject.Provider;
 public final class PaymentListViewModel_Factory implements Factory<PaymentListViewModel> {
   private final Provider<PaymentRepository> repositoryProvider;
 
-  public PaymentListViewModel_Factory(Provider<PaymentRepository> repositoryProvider) {
+  private final Provider<NotificationScheduler> notificationSchedulerProvider;
+
+  public PaymentListViewModel_Factory(Provider<PaymentRepository> repositoryProvider,
+      Provider<NotificationScheduler> notificationSchedulerProvider) {
     this.repositoryProvider = repositoryProvider;
+    this.notificationSchedulerProvider = notificationSchedulerProvider;
   }
 
   @Override
   public PaymentListViewModel get() {
-    return newInstance(repositoryProvider.get());
+    return newInstance(repositoryProvider.get(), notificationSchedulerProvider.get());
   }
 
-  public static PaymentListViewModel_Factory create(
-      Provider<PaymentRepository> repositoryProvider) {
-    return new PaymentListViewModel_Factory(repositoryProvider);
+  public static PaymentListViewModel_Factory create(Provider<PaymentRepository> repositoryProvider,
+      Provider<NotificationScheduler> notificationSchedulerProvider) {
+    return new PaymentListViewModel_Factory(repositoryProvider, notificationSchedulerProvider);
   }
 
-  public static PaymentListViewModel newInstance(PaymentRepository repository) {
-    return new PaymentListViewModel(repository);
+  public static PaymentListViewModel newInstance(PaymentRepository repository,
+      NotificationScheduler notificationScheduler) {
+    return new PaymentListViewModel(repository, notificationScheduler);
   }
 }

@@ -426,30 +426,30 @@ public final class DaggerPaymentReminderApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_paymentreminder_ui_screens_dashboard_DashboardViewModel = "com.paymentreminder.ui.screens.dashboard.DashboardViewModel";
-
-      static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
-
       static String com_paymentreminder_ui_screens_settings_SettingsViewModel = "com.paymentreminder.ui.screens.settings.SettingsViewModel";
+
+      static String com_paymentreminder_ui_screens_dashboard_DashboardViewModel = "com.paymentreminder.ui.screens.dashboard.DashboardViewModel";
 
       static String com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel = "com.paymentreminder.ui.screens.editpayment.EditPaymentViewModel";
 
       static String com_paymentreminder_ui_screens_payments_PaymentListViewModel = "com.paymentreminder.ui.screens.payments.PaymentListViewModel";
 
-      @KeepFieldType
-      DashboardViewModel com_paymentreminder_ui_screens_dashboard_DashboardViewModel2;
-
-      @KeepFieldType
-      AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
+      static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
 
       @KeepFieldType
       SettingsViewModel com_paymentreminder_ui_screens_settings_SettingsViewModel2;
+
+      @KeepFieldType
+      DashboardViewModel com_paymentreminder_ui_screens_dashboard_DashboardViewModel2;
 
       @KeepFieldType
       EditPaymentViewModel com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel2;
 
       @KeepFieldType
       PaymentListViewModel com_paymentreminder_ui_screens_payments_PaymentListViewModel2;
+
+      @KeepFieldType
+      AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
     }
   }
 
@@ -504,30 +504,30 @@ public final class DaggerPaymentReminderApp_HiltComponents_SingletonC {
 
     @IdentifierNameString
     private static final class LazyClassKeyProvider {
-      static String com_paymentreminder_ui_screens_payments_PaymentListViewModel = "com.paymentreminder.ui.screens.payments.PaymentListViewModel";
+      static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
 
-      static String com_paymentreminder_ui_screens_settings_SettingsViewModel = "com.paymentreminder.ui.screens.settings.SettingsViewModel";
+      static String com_paymentreminder_ui_screens_payments_PaymentListViewModel = "com.paymentreminder.ui.screens.payments.PaymentListViewModel";
 
       static String com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel = "com.paymentreminder.ui.screens.editpayment.EditPaymentViewModel";
 
+      static String com_paymentreminder_ui_screens_settings_SettingsViewModel = "com.paymentreminder.ui.screens.settings.SettingsViewModel";
+
       static String com_paymentreminder_ui_screens_dashboard_DashboardViewModel = "com.paymentreminder.ui.screens.dashboard.DashboardViewModel";
 
-      static String com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel = "com.paymentreminder.ui.screens.addpayment.AddPaymentViewModel";
+      @KeepFieldType
+      AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
 
       @KeepFieldType
       PaymentListViewModel com_paymentreminder_ui_screens_payments_PaymentListViewModel2;
 
       @KeepFieldType
-      SettingsViewModel com_paymentreminder_ui_screens_settings_SettingsViewModel2;
-
-      @KeepFieldType
       EditPaymentViewModel com_paymentreminder_ui_screens_editpayment_EditPaymentViewModel2;
 
       @KeepFieldType
-      DashboardViewModel com_paymentreminder_ui_screens_dashboard_DashboardViewModel2;
+      SettingsViewModel com_paymentreminder_ui_screens_settings_SettingsViewModel2;
 
       @KeepFieldType
-      AddPaymentViewModel com_paymentreminder_ui_screens_addpayment_AddPaymentViewModel2;
+      DashboardViewModel com_paymentreminder_ui_screens_dashboard_DashboardViewModel2;
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -561,10 +561,10 @@ public final class DaggerPaymentReminderApp_HiltComponents_SingletonC {
           return (T) new EditPaymentViewModel(viewModelCImpl.savedStateHandle, singletonCImpl.paymentRepositoryProvider.get(), singletonCImpl.notificationHelperProvider.get(), singletonCImpl.notificationSchedulerProvider.get());
 
           case 3: // com.paymentreminder.ui.screens.payments.PaymentListViewModel 
-          return (T) new PaymentListViewModel(singletonCImpl.paymentRepositoryProvider.get());
+          return (T) new PaymentListViewModel(singletonCImpl.paymentRepositoryProvider.get(), singletonCImpl.notificationSchedulerProvider.get());
 
           case 4: // com.paymentreminder.ui.screens.settings.SettingsViewModel 
-          return (T) new SettingsViewModel(singletonCImpl.themePreferenceManagerProvider.get());
+          return (T) new SettingsViewModel(singletonCImpl.themePreferenceManagerProvider.get(), singletonCImpl.paymentRepositoryProvider.get(), singletonCImpl.notificationSchedulerProvider.get());
 
           default: throw new AssertionError(id);
         }
